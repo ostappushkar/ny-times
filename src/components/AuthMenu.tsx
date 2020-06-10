@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { googleLogin, logIn, signUp, logOut } from "../services/auth";
 import {
@@ -24,8 +24,6 @@ interface IMenu extends IAuthMenu {
 
 const LoginMenu = (props: IMenu) => {
   const { setRegister, setAnchorEl } = props;
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleGoogleSignIn = () => {
@@ -64,7 +62,6 @@ const LoginMenu = (props: IMenu) => {
       <Typography variant="h6">Login</Typography>
       <form onSubmit={handleLogIn} id="login-form">
         <TextField
-          ref={emailRef}
           name="email"
           type="email"
           error={errorMessage.includes("Invalid email")}
@@ -74,7 +71,6 @@ const LoginMenu = (props: IMenu) => {
           {" "}
         </TextField>
         <TextField
-          ref={passwordRef}
           error={errorMessage.includes("The password is invalid")}
           name="password"
           label="Password"
