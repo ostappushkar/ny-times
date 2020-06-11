@@ -87,10 +87,12 @@ const LoginMenu = (props: IMenu) => {
         >
           Login
         </Button>
+      </form>
+      <div className="error-wrapper">
         <Typography className="error-msg" color="error" variant="caption">
           {errorMessage}
         </Typography>
-      </form>
+      </div>
       <GoogleButton
         className="google-btn"
         onClick={handleGoogleSignIn}
@@ -174,10 +176,12 @@ const RegisterMenu = (props: IMenu) => {
         >
           Sign Up
         </Button>
+      </form>
+      <div className="error-wrapper">
         <Typography className="error-msg" color="error" variant="caption">
           {errorMessage}
         </Typography>
-      </form>
+      </div>
       <GoogleButton
         className="google-btn"
         label="Sign up with Google"

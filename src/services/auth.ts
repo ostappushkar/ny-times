@@ -98,7 +98,7 @@ export const logIn = (
           let err: string;
           switch (code) {
             case "auth/wrong-password":
-              err = message;
+              err = "Wrong password";
 
               break;
             case "auth/invalid-email":

@@ -15,7 +15,6 @@ import {
   DialogContentText,
   DialogActions,
 } from "@material-ui/core";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import { watchAuthState } from "../services/auth";
 const Dashboard = () => {
   const [articles, setArticles] = useState<Array<any>>([]);
@@ -44,55 +43,62 @@ const Dashboard = () => {
       <Grid container spacing={3}>
         {articles.map((article, index) => {
           let imageIndex = article.multimedia.findIndex(
-            (x: any) => x.format === "thumbLarge"
+            (x: any) => x.format === "superJumbo"
           );
           return (
-            <Grid className="article-item" key={index} item xs={12}>
-              <Paper elevation={3}>
+            <Grid
+              className="article-item"
+              key={index}
+              item
+              xs={12}
+              sm={12}
+              md={6}
+              lg={6}
+              xl={6}
+            >
+              <Paper className="thumbnail" elevation={3}>
+                <img
+                  loading="lazy"
+                  alt={article.multimedia[imageIndex].copyright}
+                  src={article.multimedia[imageIndex].url}
+                ></img>
+                <div className="overlay"></div>
                 <Grid container className="article-content">
                   <Grid
                     className="article-info"
                     item
-                    xs={8}
-                    sm={9}
-                    lg={10}
-                    md={10}
+                    xs={12}
+                    sm={12}
+                    lg={12}
+                    md={12}
                   >
                     <div className="article-title">
-                      <Typography variant="h6"> {article.title}</Typography>
-                      <Typography variant="subtitle2">
-                        {" "}
-                        {article.byline}
-                      </Typography>
-                    </div>
-                    <div className="article-read-more">
-                      <Button endIcon={<ArrowForwardIosIcon />}>
-                        <Link
-                          to={{
-                            pathname: "/article",
-                            state: { article: article },
-                          }}
-                          onClick={handleDialogOpen}
+                      <Link
+                        to={{
+                          pathname: "/article",
+                          state: { article: article },
+                        }}
+                        onClick={handleDialogOpen}
+                      >
+                        <Typography
+                          className="article-author"
+                          variant="subtitle2"
                         >
                           {" "}
-                          Read more
-                        </Link>
-                      </Button>
+                          {article.byline}
+                        </Typography>
+                        <Typography variant="h6"> {article.title}</Typography>
+                      </Link>
                     </div>
                   </Grid>
-                  <Grid
+                  {/*   <Grid
                     className="article-image"
                     item
                     md={2}
                     sm={3}
                     lg={2}
                     xs={4}
-                  >
-                    <img
-                      alt={article.multimedia[imageIndex].copyright}
-                      src={article.multimedia[imageIndex].url}
-                    ></img>
-                  </Grid>
+                  ></Grid> */}
                 </Grid>
               </Paper>
             </Grid>

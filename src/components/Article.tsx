@@ -17,29 +17,35 @@ const Article = (props: any) => {
   };
   if (isLogged && article) {
     return (
-      <Container maxWidth="md">
-        <Button
-          onClick={handleBack}
-          className="back-button"
-          startIcon={<ArrowBackIosIcon />}
-        >
-          Go Back
-        </Button>
-        <img
-          alt={article.multimedia[imageIndex].copyright}
-          className="article-image-lg"
-          src={article.multimedia[imageIndex].url}
-        ></img>
-        <Typography variant="h3">{article.title}</Typography>
-        <Typography variant="h6"> {article.byline}</Typography>
-        <div className="article-tags">
-          {article.des_facet.map((tag, index) => {
-            return (
-              <Chip className="article-tag-item" key={index} label={tag} />
-            );
-          })}
+      <Container className="thumbnail-parent" maxWidth={false}>
+        <div className="thumbnail-article">
+          <img
+            alt={article.multimedia[imageIndex].copyright}
+            className="article-image-lg"
+            src={article.multimedia[imageIndex].url}
+          ></img>
+          <div className="overlay"></div>
         </div>
-        <Typography variant="body1">{article.abstract} </Typography>
+        <Container className="article-body" maxWidth="md">
+          <Button
+            onClick={handleBack}
+            className="back-button"
+            startIcon={<ArrowBackIosIcon />}
+          >
+            Go Back
+          </Button>
+
+          <Typography variant="h3">{article.title}</Typography>
+          <Typography variant="h6"> {article.byline}</Typography>
+          <div className="article-tags">
+            {article.des_facet.map((tag, index) => {
+              return (
+                <Chip className="article-tag-item" key={index} label={tag} />
+              );
+            })}
+          </div>
+          <Typography variant="body1">{article.abstract} </Typography>
+        </Container>
       </Container>
     );
   } else {
