@@ -10,8 +10,15 @@ import "./style/App.scss";
 export interface IProps {
   isLogged: boolean;
   currentUser: firebase.User;
+  articles: Array<IArticle>;
 }
-
+export interface IArticle {
+  title: string;
+  abstract: string;
+  byline: string;
+  tags: Array<string>;
+  image: string;
+}
 const App = () => {
   return (
     <Provider store={Store}>
