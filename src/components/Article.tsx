@@ -1,17 +1,23 @@
 import React from "react";
 import { Typography, Container, Button } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Redirect, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 import Chip from "@material-ui/core/Chip";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { IArticle } from "../App";
 import { IStoreState } from "../redux/store";
-const Article = (props: any) => {
-  const article: IArticle = props?.location?.state?.article || null;
-  const isLogged = useSelector((state: IStoreState) => state.login.isLogged);
+
+interface IArticlePage {
+  isLogged: boolean;
+  article: IArticle;
+}
+
+const Article = (props: IArticlePage) => {
+  const { article, isLogged } = props;
+  let history = useHistory();
 
   const handleBack = () => {
-    props.history.goBack();
+    history.goBack();
   };
   if (isLogged && article) {
     return (
@@ -50,4 +56,11 @@ const Article = (props: any) => {
     return <Redirect to="/"></Redirect>;
   }
 };
-export default Article;
+const mapsStateToProps = (state: IStoreState) => {
+  return {
+    isLogged: state.login.isLogged,
+    article: state.article.currentArticle,
+  };
+};
+
+export default connect(mapsStateToProps)(Article);

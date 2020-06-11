@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { IArticle } from "../App";
 import {
   Button,
@@ -15,33 +14,42 @@ import {
   DialogActions,
   CircularProgress,
 } from "@material-ui/core";
-import { watchAuthState } from "../services/auth";
-import { getArticles } from "../services/articles";
+import { watchAuthState } from "../redux/user/actions";
+import {
+  getArticles,
+  setArticle,
+  clearArticle,
+} from "../redux/article/actions";
 import { IStoreState } from "../redux/store";
-const Dashboard = () => {
+import { connect } from "react-redux";
+interface IDashboard {
+  articles: IArticle[];
+  loading: boolean;
+  isLogged: boolean;
+  watchAuthState: Function;
+  getArticles: Function;
+  setArticle: Function;
+  clearArticle: Function;
+}
+const Dashboard = (props: IDashboard) => {
+  const {
+    articles,
+    loading,
+    isLogged,
+    watchAuthState,
+    getArticles,
+    setArticle,
+    clearArticle,
+  } = props;
   const [dialogOpen, openDialog] = useState<boolean>(false);
-  const articles: Array<IArticle> = useSelector(
-    (state: IStoreState) => state.article.articles
-  );
-  const loading: boolean = useSelector(
-    (state: IStoreState) => state.article.loading
-  );
-  const isLogged: boolean = useSelector(
-    (state: IStoreState) => state.login.isLogged
-  );
-  const handleDialogOpen = (e) => {
-    if (!isLogged) {
-      e.preventDefault();
-      openDialog(true);
-    }
-  };
   const handleDialogClose = () => {
     openDialog(false);
   };
   useEffect(() => {
+    clearArticle();
     watchAuthState();
     getArticles();
-  }, []);
+  }, [watchAuthState, getArticles, clearArticle]);
   return (
     <Container maxWidth="md">
       <Typography variant="h2">Top stories from NY Times</Typography>
@@ -77,11 +85,15 @@ const Dashboard = () => {
                   >
                     <div className="article-title">
                       <Link
-                        to={{
-                          pathname: "/article",
-                          state: { article: article },
+                        to="/article"
+                        onClick={(e) => {
+                          if (!isLogged) {
+                            e.preventDefault();
+                            openDialog(true);
+                          } else {
+                            setArticle(article);
+                          }
                         }}
-                        onClick={handleDialogOpen}
                       >
                         <Typography
                           className="article-author"
@@ -94,14 +106,6 @@ const Dashboard = () => {
                       </Link>
                     </div>
                   </Grid>
-                  {/*   <Grid
-                    className="article-image"
-                    item
-                    md={2}
-                    sm={3}
-                    lg={2}
-                    xs={4}
-                  ></Grid> */}
                 </Grid>
               </Paper>
             </Grid>
@@ -129,5 +133,18 @@ const Dashboard = () => {
     </Container>
   );
 };
+const mapsStateToProps = (state: IStoreState) => {
+  return {
+    isLogged: state.login.isLogged,
+    loading: state.article.loading,
+    articles: state.article.articles,
+  };
+};
+const mapsDispatchToProps = {
+  watchAuthState,
+  getArticles,
+  setArticle,
+  clearArticle,
+};
 
-export default Dashboard;
+export default connect(mapsStateToProps, mapsDispatchToProps)(Dashboard);

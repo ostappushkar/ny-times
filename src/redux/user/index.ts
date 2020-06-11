@@ -16,7 +16,10 @@ interface IDispathAction {
     error: any;
   };
 }
-const loginReducer = (state = loginState, action: IDispathAction) => {
+const loginReducer = (
+  state = loginState,
+  action: IDispathAction
+): ILoginState => {
   switch (action.type) {
     case actionTypes.GET_USER:
       return {

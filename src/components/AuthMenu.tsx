@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { googleLogin, logIn, signUp, logOut } from "../services/auth";
 import {
   Typography,
@@ -16,9 +16,16 @@ interface IAuthData {
   password: string;
 }
 interface IAuthMenu {
+  isLogged: boolean;
+  currentUser: firebase.User;
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement>>;
 }
-interface IMenu extends IAuthMenu {
+interface ILoggedMenu {
+  currentUser: firebase.User;
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement>>;
+}
+interface IMenu {
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement>>;
   setRegister: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -203,11 +210,8 @@ const RegisterMenu = (props: IMenu) => {
     </div>
   );
 };
-const LoggedMenu = (props: IAuthMenu) => {
-  const { setAnchorEl } = props;
-  const currentUser = useSelector(
-    (state: IStoreState) => state.login.currentUser
-  );
+const LoggedMenu = (props: ILoggedMenu) => {
+  const { setAnchorEl, currentUser } = props;
   const handleLogout = () => {
     logOut();
     setAnchorEl(null);
@@ -221,11 +225,10 @@ const LoggedMenu = (props: IAuthMenu) => {
   );
 };
 const AuthMenu = React.forwardRef((props: IAuthMenu, _ref: any) => {
-  const { setAnchorEl } = props;
-  const isLogged = useSelector((state: IStoreState) => state.login.isLogged);
+  const { isLogged, currentUser, setAnchorEl } = props;
   const [isRegister, setRegister] = useState(false);
   if (isLogged) {
-    return <LoggedMenu setAnchorEl={setAnchorEl} />;
+    return <LoggedMenu currentUser={currentUser} setAnchorEl={setAnchorEl} />;
   } else {
     if (isRegister) {
       return (
@@ -236,4 +239,10 @@ const AuthMenu = React.forwardRef((props: IAuthMenu, _ref: any) => {
     }
   }
 });
-export default AuthMenu;
+const mapStateToProps = (state: IStoreState) => {
+  return {
+    isLogged: state.login.isLogged,
+    currentUser: state.login.currentUser,
+  };
+};
+export default connect(mapStateToProps)(AuthMenu);

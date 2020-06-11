@@ -5,15 +5,17 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import AuthMenu from "./AuthMenu";
 import { IStoreState } from "../redux/store";
 
-const Header = () => {
+interface IHeader {
+  currentUser: firebase.User;
+}
+
+const Header = (props: IHeader) => {
+  const { currentUser } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const currentUser = useSelector(
-    (state: IStoreState) => state.login.currentUser
-  );
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -49,4 +51,9 @@ const Header = () => {
     </AppBar>
   );
 };
-export default Header;
+const mapsStateToProps = (state: IStoreState) => {
+  return {
+    currentUser: state.login.currentUser,
+  };
+};
+export default connect(mapsStateToProps)(Header);

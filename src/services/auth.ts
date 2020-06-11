@@ -1,7 +1,4 @@
 import { authRef, GoogleProvider, persistance } from "../config/firebase";
-import Store from "../redux/store";
-import action from "../redux/actions";
-import actionTypes from "../redux/user/actionTypes";
 
 export const logOut = (
   successCallback: () => void = () => {},
@@ -20,17 +17,7 @@ export const logOut = (
       errorCallback(message);
     });
 };
-export const watchAuthState = () => {
-  authRef.onAuthStateChanged((user: firebase.User) => {
-    user
-      ? Store.dispatch(
-          action(actionTypes.GET_USER, { isLogged: true, currentUser: user })
-        )
-      : Store.dispatch(
-          action(actionTypes.GET_USER, { isLogged: false, currentUser: null })
-        );
-  });
-};
+
 export const googleLogin = (
   successCallback: () => void = () => {},
   errorCallback: (message: string) => void = () => {}

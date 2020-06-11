@@ -10,13 +10,18 @@ interface IDispathAction {
 export interface IArticleState {
   loading: boolean;
   articles: Array<IArticle>;
+  currentArticle: IArticle;
 }
 const articleState: IArticleState = {
   loading: false,
   articles: [],
+  currentArticle: null,
 };
 
-const articleReducer = (state = articleState, action: IDispathAction) => {
+const articleReducer = (
+  state = articleState,
+  action: IDispathAction
+): IArticleState => {
   switch (action.type) {
     case actionTypes.ARTICLE_LOADING:
       return {
@@ -28,6 +33,16 @@ const articleReducer = (state = articleState, action: IDispathAction) => {
         ...state,
         loading: false,
         articles: action.payload.data.articles,
+      };
+    case actionTypes.SET_ARTICLE:
+      return {
+        ...state,
+        currentArticle: action.payload.data.article,
+      };
+    case actionTypes.CLEAR_ARTICLE:
+      return {
+        ...state,
+        currentArticle: null,
       };
     default:
       return {
