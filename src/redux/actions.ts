@@ -1,19 +1,7 @@
-import { actionTypes } from "./actionTypes";
-import { IArticle } from "../App";
-export const getUser = (isLogged: boolean, currentUser: firebase.User) => {
+const action = (type: string, data?: any, error?: any) => {
   return {
-    type: actionTypes.GET_USER,
-    payload: { isLogged: isLogged, currentUser: currentUser },
+    type: type,
+    payload: { data: data, error: error },
   };
 };
-export const getArticlesSuccess = (articles: Array<IArticle>) => {
-  return {
-    type: actionTypes.GET_ARTICLES_SUCCESS,
-    payload: { articles: articles },
-  };
-};
-export const getArticlesStarted = () => {
-  return {
-    type: actionTypes.GET_ARTICLES_STARTED,
-  };
-};
+export default action;

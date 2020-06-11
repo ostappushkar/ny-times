@@ -1,12 +1,14 @@
 import Store from "../redux/store";
-import { getArticlesStarted, getArticlesSuccess } from "../redux/actions";
+import action from "../redux/actions";
+import actionTypes from "../redux/article/actionTypes";
 import Http from "./http";
+import { IArticle } from "../App";
 
 export const getArticles = () => {
-  Store.dispatch(getArticlesStarted());
+  Store.dispatch(action(actionTypes.ARTICLE_LOADING));
   Http.get("/svc/topstories/v2/home.json")
     .then((response: any) => {
-      let articles = [];
+      let articles: Array<IArticle> = [];
       response.results.map((item: any) => {
         return articles.push({
           title: item.title,
@@ -16,7 +18,9 @@ export const getArticles = () => {
           image: item.multimedia[0].url,
         });
       });
-      Store.dispatch(getArticlesSuccess(articles));
+      Store.dispatch(
+        action(actionTypes.ARTICLE_LOADED, { articles: articles })
+      );
     })
     .catch((e) => {
       console.warn(e);

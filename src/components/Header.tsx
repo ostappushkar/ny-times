@@ -7,11 +7,13 @@ import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import { useSelector } from "react-redux";
 import AuthMenu from "./AuthMenu";
-import { IProps } from "../App";
+import { IStoreState } from "../redux/store";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const currentUser = useSelector((state: IProps) => state.currentUser);
+  const currentUser = useSelector(
+    (state: IStoreState) => state.login.currentUser
+  );
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };

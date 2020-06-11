@@ -7,11 +7,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Store from "./redux/store";
 import "./style/App.scss";
 
-export interface IProps {
-  isLogged: boolean;
-  currentUser: firebase.User;
-  articles: Array<IArticle>;
-}
 export interface IArticle {
   title: string;
   abstract: string;

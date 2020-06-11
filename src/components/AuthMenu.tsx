@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import GoogleButton from "react-google-button";
-import { IProps } from "../App";
+import { IStoreState } from "../redux/store";
 
 interface IAuthData {
   email: string;
@@ -205,8 +205,9 @@ const RegisterMenu = (props: IMenu) => {
 };
 const LoggedMenu = (props: IAuthMenu) => {
   const { setAnchorEl } = props;
-  const currentUser = useSelector((state: IProps) => state.currentUser);
-
+  const currentUser = useSelector(
+    (state: IStoreState) => state.login.currentUser
+  );
   const handleLogout = () => {
     logOut();
     setAnchorEl(null);
@@ -221,7 +222,7 @@ const LoggedMenu = (props: IAuthMenu) => {
 };
 const AuthMenu = React.forwardRef((props: IAuthMenu, _ref: any) => {
   const { setAnchorEl } = props;
-  const isLogged = useSelector((state: IProps) => state.isLogged);
+  const isLogged = useSelector((state: IStoreState) => state.login.isLogged);
   const [isRegister, setRegister] = useState(false);
   if (isLogged) {
     return <LoggedMenu setAnchorEl={setAnchorEl} />;

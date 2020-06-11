@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { IProps, IArticle } from "../App";
+import { IArticle } from "../App";
 import {
   Button,
   Dialog,
@@ -17,12 +17,18 @@ import {
 } from "@material-ui/core";
 import { watchAuthState } from "../services/auth";
 import { getArticles } from "../services/articles";
+import { IStoreState } from "../redux/store";
 const Dashboard = () => {
   const [dialogOpen, openDialog] = useState<boolean>(false);
   const articles: Array<IArticle> = useSelector(
-    (state: IProps) => state.articles
+    (state: IStoreState) => state.article.articles
   );
-  const isLogged: boolean = useSelector((state: IProps) => state.isLogged);
+  const loading: boolean = useSelector(
+    (state: IStoreState) => state.article.loading
+  );
+  const isLogged: boolean = useSelector(
+    (state: IStoreState) => state.login.isLogged
+  );
   const handleDialogOpen = (e) => {
     if (!isLogged) {
       e.preventDefault();
@@ -39,8 +45,8 @@ const Dashboard = () => {
   return (
     <Container maxWidth="md">
       <Typography variant="h2">Top stories from NY Times</Typography>
-      <Grid container spacing={3}>
-        {articles.length === 0 && <CircularProgress />}
+      <Grid className="dashboard" container spacing={3}>
+        {loading && <CircularProgress />}
         {articles.map((article, index) => {
           return (
             <Grid

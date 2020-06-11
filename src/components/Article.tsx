@@ -4,10 +4,11 @@ import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Chip from "@material-ui/core/Chip";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import { IProps, IArticle } from "../App";
+import { IArticle } from "../App";
+import { IStoreState } from "../redux/store";
 const Article = (props: any) => {
   const article: IArticle = props?.location?.state?.article || null;
-  const isLogged = useSelector((state: IProps) => state.isLogged);
+  const isLogged = useSelector((state: IStoreState) => state.login.isLogged);
 
   const handleBack = () => {
     props.history.goBack();
