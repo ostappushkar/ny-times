@@ -5,8 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { IProps } from "../App";
-import Http from "../services/http";
+import { IProps, IArticle } from "../App";
 import {
   Button,
   Dialog,
@@ -14,11 +13,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  CircularProgress,
 } from "@material-ui/core";
 import { watchAuthState } from "../services/auth";
+import { getArticles } from "../services/articles";
 const Dashboard = () => {
-  const [articles, setArticles] = useState<Array<any>>([]);
   const [dialogOpen, openDialog] = useState<boolean>(false);
+  const articles: Array<IArticle> = useSelector(
+    (state: IProps) => state.articles
+  );
   const isLogged: boolean = useSelector((state: IProps) => state.isLogged);
   const handleDialogOpen = (e) => {
     if (!isLogged) {
@@ -31,20 +34,14 @@ const Dashboard = () => {
   };
   useEffect(() => {
     watchAuthState();
-    const fetchData = async () => {
-      const response: any = await Http.get("/svc/topstories/v2/home.json");
-      setArticles(response?.results);
-    };
-    fetchData();
+    getArticles();
   }, []);
   return (
     <Container maxWidth="md">
       <Typography variant="h2">Top stories from NY Times</Typography>
       <Grid container spacing={3}>
+        {articles.length === 0 && <CircularProgress />}
         {articles.map((article, index) => {
-          let imageIndex = article.multimedia.findIndex(
-            (x: any) => x.format === "superJumbo"
-          );
           return (
             <Grid
               className="article-item"
@@ -59,8 +56,8 @@ const Dashboard = () => {
               <Paper className="thumbnail" elevation={3}>
                 <img
                   loading="lazy"
-                  alt={article.multimedia[imageIndex].copyright}
-                  src={article.multimedia[imageIndex].url}
+                  alt={article.byline}
+                  src={article.image}
                 ></img>
                 <div className="overlay"></div>
                 <Grid container className="article-content">

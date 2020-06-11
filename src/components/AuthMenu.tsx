@@ -127,8 +127,9 @@ const RegisterMenu = (props: IMenu) => {
       object.email,
       object.password,
       () => {
-        console.log("Logged in with Google");
+        console.log("Registered new user");
         setAnchorEl(null);
+        setRegister(false);
       },
       (err) => {
         setErrorMessage(err);
@@ -139,6 +140,7 @@ const RegisterMenu = (props: IMenu) => {
     googleLogin(
       () => {
         console.log("Signed up with Google");
+        setRegister(false);
         setAnchorEl(null);
       },
       (err) => {
